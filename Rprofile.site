@@ -23,8 +23,8 @@
 #})
 
 .First <- function(){
- Sys.setenv(PATH="/usr/local/openmpi/bin:/opt/openlava/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/openlava-2.2/bin")
- Sys.setenv(LD_LIBRARY_PATH="/usr/local/openmpi/lib")
+ Sys.setenv(PATH="/usr/local/cuda-6.5/bin:/usr/local/openmpi/bin:/opt/openlava/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/openlava-2.2/bin")
+ Sys.setenv(LD_LIBRARY_PATH="/usr/local/openmpi/lib:/usr/local/cuda-6.5/lib64")
  Sys.setenv(OMPI_MCA_btl_tcp_if_include='eth0')
 }
 
