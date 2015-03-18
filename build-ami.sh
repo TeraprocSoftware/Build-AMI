@@ -100,8 +100,6 @@ install.packages("Rmpi", repos="http://cran.utstat.utoronto.ca/",
                    "--with-Rmpi-libpath=/usr/local/openmpi/lib/",
                    "--with-Rmpi-type=OPENMPI"))
 install.packages(c("snow","snowfall"), repos="http://cran.utstat.utoronto.ca/")
-source("http://bioconductor.org/biocLite.R")
-biocLite("BiocParallel")
 EOF
 
 LD_LIBRARY_PATH=/usr/local/openmpi/lib:$LD_LIBRARY_PATH Rscript r-pkg
@@ -158,11 +156,6 @@ echo "Install NFS "
 echo "###############"
 sleep 3
 apt-get install -y nfs-common nfs-kernel-server
-
-# exit the script before installing LDAP. Do LDAP
-# installation by copying the cmds below to CLI
-# You'll be asked to set LDAP admin password and 
-# input it for initialization
 
 ###############
 # Install LDAP
