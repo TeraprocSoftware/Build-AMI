@@ -1,16 +1,13 @@
 library(BatchJobs)
-library(BiocParallel)
 
-setwd("./examples/")
+conf = BatchJobs:::getBatchJobsConf()
 
-FUN <- function(i) {
-        system("hostname", intern=TRUE)
-}
+conf$cluster.functions = makeClusterFunctionsLSF("/home/clusteradmin/batch.tmpl")
 
-funs = makeClusterFunctionsLSF("../batch.tmpl")
-param <- BatchJobsParam(4, cluster.functions=funs)
-register(param)
-## do work
-xx <- bplapply(1:100, FUN)
-table(unlist(xx))
-
+reg = makeRegistry(id = "BatchJobsExample", seed = 123)
+f = function(x) Sys.sleep(x)
+batchMap(reg, f, 5:9)
+submitJobs(reg)
+showStatus(reg)
+waitForJobs(reg)
+showStatus(reg)
