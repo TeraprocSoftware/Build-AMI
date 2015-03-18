@@ -1,2 +1,3 @@
 LABEL=cloudimg-rootfs   /        ext4   defaults,discard        0 0
 master_hostname:/home	/home	nfs	auto,noatime,nolock,bg,intr,tcp	0 0
+master_hostname:/data	/data	nfs	auto,noatime,nolock,bg,intr,tcp	0 0

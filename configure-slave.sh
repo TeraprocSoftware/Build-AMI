@@ -28,7 +28,7 @@ cp -f /opt/teraproc/nsswitch.conf /etc/ >> $LOG_FILE 2>&1
 update-rc.d nscd enable >> $LOG_FILE 2>&1
 
 # check if master is ready to proceed otherwise wait.
-show_message "Mount master /home to slave ..."
+show_message "Mount master /home, /data to slave ..."
 loop=0
 while true; do
 	rpcinfo $master_hostname | grep mountd >> /dev/null
@@ -45,12 +45,15 @@ while true; do
         fi
 done
 
-# mount /home from openlava master
+# mount /home, /data from openlava master
 #initctl restart idmapd
+mkdir /data
+chmod 777 /data
 mount -t nfs $master_hostname:/home /home >> $LOG_FILE 2>&1
-sed -i "s/master_hostname/$master_hostname/" /opt/teraproc/fstab >> $LOG_FILE 2>&1
+mount -t nfs $master_hostname:/data /data >> $LOG_FILE 2>&1
+sed -i "s/master_hostname/$master_hostname/g" /opt/teraproc/fstab >> $LOG_FILE 2>&1
 mv -f /opt/teraproc/fstab /etc/fstab >> $LOG_FILE 2>&1
-show_message "Mount master /home to slave ... done"
+show_message "Mount master /home, /data to slave ... done"
 
 # stop nfs server
 /etc/init.d/nfs-kernel-server stop >> $LOG_FILE 2>&1

@@ -99,10 +99,9 @@ install.packages("Rmpi", repos="http://cran.utstat.utoronto.ca/",
                  c("--with-Rmpi-include=/usr/local/openmpi/include/",
                    "--with-Rmpi-libpath=/usr/local/openmpi/lib/",
                    "--with-Rmpi-type=OPENMPI"))
-install.packages("snow", repos="http://cran.utstat.utoronto.ca/")
+install.packages(c("snow","snowfall"), repos="http://cran.utstat.utoronto.ca/")
 source("http://bioconductor.org/biocLite.R")
 biocLite("BiocParallel")
-biocLite("GEOquery")
 EOF
 
 LD_LIBRARY_PATH=/usr/local/openmpi/lib:$LD_LIBRARY_PATH Rscript r-pkg

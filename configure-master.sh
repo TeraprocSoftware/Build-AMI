@@ -17,20 +17,17 @@ cluster_admin_username=$1
 cluster_admin_password=$2
 master_hostname=`hostname`
 
-# mount device to be /home
-show_message "Mount device to /home ..."
+# mount device to be  /data
+show_message "Mount device to /data ..."
 device_name=`fdisk -l 2>&1 | grep "doesn't contain a valid partition table" | awk '{print $2}'`
 if [ $device_name ]; then
         echo -e "o\nn\np\n1\n\n\nw" | fdisk $device_name >> $LOG_FILE 2>&1 
         partition_name=$device_name"1"
         mkfs -t ext4 $partition_name >> $LOG_FILE 2>&1
-        mkdir /home2 >> $LOG_FILE 2>&1
-        mount $partition_name /home2 >> $LOG_FILE 2>&1
-        cp -Rf /home/ubuntu /home2 >> $LOG_FILE 2>&1
-        chown ubuntu:ubuntu -Rf /home2/ubuntu >> $LOG_FILE 2>&1
-        umount /home2 >> $LOG_FILE 2>&1
-        mount $partition_name /home >> $LOG_FILE 2>&1
-        echo "$partition_name       /home   ext4    defaults,discard        0 0" >> /etc/fstab
+        mkdir /data >> $LOG_FILE 2>&1
+	chmod 777 /data >> $LOG_FILE 2>&1
+        mount $partition_name /data >> $LOG_FILE 2>&1
+        echo "$partition_name       /data   ext4    defaults,discard        0 0" >> /etc/fstab
 fi
 
 # create LDAP group and add user
@@ -82,10 +79,11 @@ cp /opt/openlava/etc/openlava /etc/init.d/ >> $LOG_FILE 2>&1
 /etc/init.d/openlava start >> $LOG_FILE 2>&1
 update-rc.d openlava defaults >> $LOG_FILE 2>&1
 
-# configure /home to be shared
-show_message "Export /home ..."
+# configure /home, /data to be shared
+show_message "Export /home, /data ..."
 cat >> /opt/teraproc/exports << EOF
 /home *(rw,no_root_squash)
+/data *(rw,no_root_squash)
 EOF
 cp -f /opt/teraproc/exports /etc/exports >> $LOG_FILE 2>&1
 /etc/init.d/nfs-kernel-server restart >> $LOG_FILE 2>&1
