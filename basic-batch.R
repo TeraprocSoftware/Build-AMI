@@ -2,9 +2,9 @@ library(BatchJobs)
 
 conf = BatchJobs:::getBatchJobsConf()
 
-conf$cluster.functions = makeClusterFunctionsLSF("/home/clusteradmin/batch.tmpl")
+conf$cluster.functions = makeClusterFunctionsOpenLava("../batch.tmpl")
 
-reg = makeRegistry(id = "BatchJobsExample", seed = 123)
+reg = makeRegistry(id = "BatchJobsExample")
 f = function(x) Sys.sleep(x)
 batchMap(reg, f, 5:9)
 submitJobs(reg)
