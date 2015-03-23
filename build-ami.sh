@@ -106,7 +106,7 @@ LD_LIBRARY_PATH=/usr/local/openmpi/lib:$LD_LIBRARY_PATH Rscript r-pkg
 
 # Hack BatchJobs to support Rmpi on OL before BatchJobs has new package on web
 mv /usr/local/lib/R/site-library/BatchJobs /usr/local/lib/R/site-library/orig.BatchJobs
-tar xvf BatchJobs.rmpi.binary.0320.tar -C /usr/local/lib/R/site-library/
+tar xvf BatchJobs-0323-rmpi-ol-fix.tar -C /usr/local/lib/R/site-library/
 chown -Rf root:root /usr/local/lib/R/site-library/BatchJobs
 
 # install rpux and gputools R packages.

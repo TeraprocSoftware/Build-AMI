@@ -58,8 +58,7 @@ mkdir /home/$cluster_admin_username >> $LOG_FILE 2>&1
 mkdir /home/$cluster_admin_username/examples >> $LOG_FILE 2>&1
 cp -f /opt/teraproc/basic-batch.R /home/$cluster_admin_username/examples >> $LOG_FILE 2>&1
 cp -f /opt/teraproc/basic-rmpi.R /home/$cluster_admin_username/examples >> $LOG_FILE 2>&1
-cp -f /opt/teraproc/batch.tmpl /home/$cluster_admin_username >> $LOG_FILE 2>&1
-cp -f /opt/teraproc/interactive.tmpl /home/$cluster_admin_username >> $LOG_FILE 2>&1
+cp -f /opt/teraproc/*.tmpl /home/$cluster_admin_username >> $LOG_FILE 2>&1
 chown -Rf $cluster_admin_username:cluster_users /home/$cluster_admin_username >> $LOG_FILE 2>&1
 su - $cluster_admin_username -c "ssh-keygen -q -t rsa -f ~/.ssh/id_rsa -N '' -C $cluster_admin_username" >> $LOG_FILE 2>&1
 su - $cluster_admin_username -c "cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys2 && chmod 0600 ~/.ssh/authorized_keys2" >> $LOG_FILE 2>&1

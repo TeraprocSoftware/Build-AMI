@@ -2,7 +2,7 @@ library(BatchJobs)
 
 conf = BatchJobs:::getBatchJobsConf()
 
-conf$cluster.functions = makeClusterFunctionsLSF("../rmpi-batch.tmpl")
+conf$cluster.functions = makeClusterFunctionsOpenLava("../rmpi-batch.tmpl")
 
 reg = makeRegistry(id = "BatchJobsRmpiExample")
 
@@ -17,7 +17,7 @@ f = function(x) {
   mpi.spawn.Rslaves(nslaves=slaveno)
   mpi.remote.exec(paste("I am",mpi.comm.rank(),"of",mpi.comm.size()))
   mpi.close.Rslaves()
-  
+  mpi.exit()  
 }
 batchMap(reg, f, 1)
 submitJobs(reg, np=2)
