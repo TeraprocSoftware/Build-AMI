@@ -104,6 +104,22 @@ EOF
 
 LD_LIBRARY_PATH=/usr/local/openmpi/lib:$LD_LIBRARY_PATH Rscript r-pkg
 
+# Hack BatchJobs to support Rmpi on OL before BatchJobs has new package on web
+mv /usr/local/lib/R/site-library/BatchJobs /usr/local/lib/R/site-library/orig.BatchJobs
+tar xvf BatchJobs.rmpi.binary.0320.tar -C /usr/local/lib/R/site-library/
+chown -Rf root:root /usr/local/lib/R/site-library/BatchJobs
+
+# install rpux and gputools R packages.
+. /etc/profile.d/nvidia.sh
+wget http://www.r-tutor.com/sites/default/files/rpud/rpux_0.5.0_linux.tar.gz
+tar xvfz rpux_0.5.0_linux.tar.gz
+R CMD INSTALL ./rpux_0.5.0_linux/rpud_0.5.0_src.tar.gz
+R CMD INSTALL ./rpux_0.5.0_linux/rpudplus_0.5.0.tar.gz
+
+ln -s /usr/share/R/include /usr/lib/R/
+tar zxvf gputools_0.28.tar.gz
+R CMD build gputools && R CMD INSTALL gputools_0.28.tar.gz
+
 ###############
 # Install R Studio
 ###############
@@ -115,8 +131,8 @@ apt-get install -y gdebi-core
 apt-get install -y libapparmor1 # Required only for Ubuntu, not Debian
 wget http://download2.rstudio.org/rstudio-server-0.98.1103-amd64.deb
 gdebi --n rstudio-server-0.98.1103-amd64.deb
-# enable Rstudio health check 
-#cp -f rserver.conf /etc/rstudio/rserver.conf
+# set LD_LIBRARY_PATH to rstudio server 
+cp -f rserver.conf /etc/rstudio/rserver.conf
 
 # set OL path for R Studio
 cp -f Rprofile.site /etc/R/Rprofile.site
@@ -128,19 +144,28 @@ echo "###############"
 echo "Install openlava"
 echo "###############"
 sleep 3
+# install from source
 apt-get install -y autoconf tcl tcl-dev automake bison flex libtool intltool xorg-dev libsamplerate-dev libncurses5-dev 
-tar zxvf openlava-3.0.1.tar.gz
-cd openlava-3.0.1
-autoreconf --install
-./configure --prefix=/opt/openlava-3.0.1
-make
-make install
-ln -s /opt/openlava-3.0.1 /opt/openlava
-cd config
-cp lsf.conf lsb.hosts lsb.params lsb.queues lsb.users lsf.cluster.openlava lsf.shared lsf.task openlava.csh openlava.setup openlava.sh /opt/openlava/etc/
+#tar zxvf openlava-3.0.1.tar.gz
+#cd openlava-3.0.1
+#autoreconf --install
+#./configure --prefix=/opt/openlava-3.0.1
+#make
+#make install
+#cd config
+#cp lsf.conf lsb.hosts lsb.params lsb.queues lsb.users lsf.cluster.openlava lsf.shared lsf.task openlava.csh openlava.setup openlava.sh /opt/openlava/etc/
+
+# install from deb package
+apt-get install -f -y
+dpkg -i openlava-3.0-0.x86_64.deb
+/etc/init.d/openlava stop
+update-rc.d openlava disable
+userdel openlava
+
+ln -s /opt/openlava-3.0 /opt/openlava
 
 # comment out user groups that don't exist
-mv -f /opt/teraproc/lsb.users /opt/openlava/etc
+#mv -f /opt/teraproc/lsb.users /opt/openlava/etc
 mv -f /opt/teraproc/lsb.queues /opt/openlava/etc
 mv -f /opt/teraproc/lsb.params /opt/openlava/etc
 mv -f /opt/teraproc/lsb.hosts /opt/openlava/etc

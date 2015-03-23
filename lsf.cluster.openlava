@@ -13,7 +13,7 @@ End    ClusterAdmins
 
 Begin	Host
 HOSTNAME          model          type  server  r1m  RESOURCES
-MASTER_HOSTNAME                  IntelI5      linux   1      3.5    (cs)
+MASTER_HOSTNAME     !       !      1      -      - 
 End     Host
 
 Begin ResourceMap
